@@ -1,0 +1,17 @@
+{
+  "firstName": "Maya",
+  "lastName": "Lores",
+  "email": "maya@yopmail.com",
+  "phone": "38760123456",
+  "password": "password123456",
+  "birthDay": "5",
+  "birthMonth": "November",
+  "birthYear": "1999",
+  "country": "Bosnia and Herzegowina",
+  "city": "Konjic",
+  "zipCode": "88400",
+  "address": "Kolonija",
+  "cardNumber": "4242424242424242",
+  "expiryDate": "2026",
+  "cardCode": "424"
+}

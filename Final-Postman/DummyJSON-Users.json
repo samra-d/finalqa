@@ -1,0 +1,493 @@
+{
+	"info": {
+		"_postman_id": "4a554bec-762b-4ef6-96a2-15979199c064",
+		"name": "DummyJSON-Users",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "30420589",
+		"_collection_link": "https://orange-shadow-385549.postman.co/workspace/qa~721d9e5e-dd8b-4a0f-879e-bc13d95f7f04/collection/30420589-4a554bec-762b-4ef6-96a2-15979199c064?action=share&source=collection_link&creator=30420589"
+	},
+	"item": [
+		{
+			"name": "LOG IN",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Save token to Environment\", function () {\r",
+							"   let responseBody = pm.response.json()\r",
+							"\r",
+							"   let token = responseBody.token\r",
+							"   \r",
+							"   pm.environment.set(\"token\",token)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Save URL to Environment\", function () {\r",
+							"   let responseBody = pm.response.json()\r",
+							"\r",
+							"   let baseURL = \"https://dummyjson.com\"\r",
+							"   \r",
+							"   pm.environment.set(\"baseURL\",baseURL)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"kminchelle\",\r\n    \"password\" : \"0lelplR\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "fetch('https://dummyjson.com/products')\n.then(res => res.json())\n.then(console.log);\nfetch('https://dummyjson.com/auth/login', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({\n    \n    username: 'kminchelle',\n    password: '0lelplR',\n    // expiresInMins: 60, // optional\n  })\n})\n.then(res => res.json())\n.then(console.log);"
+			},
+			"response": []
+		},
+		{
+			"name": "ALL USERS",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'users' array\", function () {\r",
+							"    pm.expect(pm.response.json()).to.have.property('users').that.is.an('array');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'total' number\", function () {\r",
+							"    pm.expect(pm.response.json()).to.have.property('total').that.is.a('number');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Total equal to 100\", function () {\r",
+							"    pm.expect(pm.response.json())\r",
+							"    .to.have.property('total')\r",
+							"    .to.equal(100);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response JSON array has length greater than 0\", function () {\r",
+							"    pm.expect(pm.response.json().users.length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response Content-Type is application/json\", function () {\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": "{{baseURL}}/auth/users"
+			},
+			"response": []
+		},
+		{
+			"name": "USER BY ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Set userId environment variable\", function () {\r",
+							"   \r",
+							"    pm.environment.set(\"userId\", 5);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response Content-Type is application/json\", function () {\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": "{{baseURL}}/auth/users/5"
+			},
+			"response": []
+		},
+		{
+			"name": "USER'S CARTS",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test('Response has \\'total\\' number', function () {\r",
+							"    pm.expect(pm.response.json()).to.have.property('total').that.is.a('number');\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Response JSON array has length greater than 0\", function () {\r",
+							"    pm.expect(pm.response.json().carts.length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response Content-Type is application/json', function () {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": "{{baseURL}}/auth/users/{{userId}}/carts"
+			},
+			"response": []
+		},
+		{
+			"name": "USER'S POSTS",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test('Response has \\'total\\' number', function () {\r",
+							"    pm.expect(pm.response.json()).to.have.property('total').that.is.a('number');\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Response JSON array has length greater than 0\", function () {\r",
+							"    pm.expect(pm.response.json().posts.length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response Content-Type is application/json', function () {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": "{{baseURL}}/auth/users/{{userId}}/posts"
+			},
+			"response": []
+		},
+		{
+			"name": "USER'S TODOS",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test('Response has \\'total\\' number', function () {\r",
+							"    pm.expect(pm.response.json()).to.have.property('total').that.is.a('number');\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Response JSON array has length greater than 0\", function () {\r",
+							"    pm.expect(pm.response.json().todos.length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response Content-Type is application/json', function () {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": "{{baseURL}}/auth/users/{{userId}}/todos"
+			},
+			"response": []
+		},
+		{
+			"name": "FILTER USERS",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test('Response has \\'total\\' number', function () {\r",
+							"    pm.expect(pm.response.json()).to.have.property('total').that.is.a('number');\r",
+							"})\r",
+							"\r",
+							"\r",
+							"pm.test('Response Content-Type is application/json', function () {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+							"})\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response includes the 'users' array\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.users).to.exist.and.to.be.an('array');\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/auth/users/filter?key=eyeColor&value=Green",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"users",
+						"filter"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "eyeColor"
+						},
+						{
+							"key": "value",
+							"value": "Green"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NEW USER",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test('Response Content-Type is application/json', function () {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+							"})\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Novo ime-Leyla\",\r\n    \"lastName\": \"Novo prezime-L\",\r\n    \"age\": \"44\",\r\n    \"gender\": \"female\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseURL}}/auth/users/add"
+			},
+			"response": []
+		},
+		{
+			"name": "UPDATE USER BY ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Set lastName environment variable\", function () {\r",
+							"   \r",
+							"    pm.environment.set(\"lastName\", \"Medley\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Set firstName environment variable\", function () {\r",
+							"   \r",
+							"    pm.environment.set(\"firstName\", \"Maya\");\r",
+							"});\r",
+							"\r",
+							"pm.test('Response Content-Type is application/json', function () {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"lastName\": \"{{lastName}}\",\r\n    \"firstName\": \"{{firstName}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseURL}}/auth/users/{{userId}}"
+			},
+			"response": []
+		}
+	]
+}

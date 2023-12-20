@@ -1,0 +1,231 @@
+{
+	"info": {
+		"_postman_id": "19c509ea-7cf5-4e96-b5ad-d81278773bde",
+		"name": "DummyJSON-Comments",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "30420589",
+		"_collection_link": "https://orange-shadow-385549.postman.co/workspace/qa~721d9e5e-dd8b-4a0f-879e-bc13d95f7f04/collection/30420589-19c509ea-7cf5-4e96-b5ad-d81278773bde?action=share&source=collection_link&creator=30420589"
+	},
+	"item": [
+		{
+			"name": "LOG IN",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Save token to Environment\", function () {\r",
+							"   let responseBody = pm.response.json()\r",
+							"\r",
+							"   let token = responseBody.token\r",
+							"   \r",
+							"   pm.environment.set(\"token\",token)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Save URL to Environment\", function () {\r",
+							"   let responseBody = pm.response.json()\r",
+							"\r",
+							"   let baseURL = \"https://dummyjson.com\"\r",
+							"   \r",
+							"   pm.environment.set(\"baseURL\",baseURL)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"kminchelle\",\r\n    \"password\" : \"0lelplR\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://dummyjson.com/auth/login"
+			},
+			"response": []
+		},
+		{
+			"name": "ALL COMMENTS",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'comments' array\", function () {\r",
+							"    pm.expect(pm.response.json()).to.have.property('comments').that.is.an('array');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has 'total' number\", function () {\r",
+							"    pm.expect(pm.response.json()).to.have.property('total').that.is.a('number');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Total equal to 340\", function () {\r",
+							"    pm.expect(pm.response.json())\r",
+							"    .to.have.property('total')\r",
+							"    .to.equal(340);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response JSON array has length greater than 0\", function () {\r",
+							"    pm.expect(pm.response.json().comments.length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response Content-Type is application/json\", function () {\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": "{{baseURL}}/auth/comments"
+			},
+			"response": []
+		},
+		{
+			"name": "FILTER COMMENTS",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test('Response has \\'total\\' number', function () {\r",
+							"    pm.expect(pm.response.json()).to.have.property('total').that.is.a('number');\r",
+							"})\r",
+							"\r",
+							"\r",
+							"pm.test('Response Content-Type is application/json', function () {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+							"})\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/auth/comments?limit=5&skip=335",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"comments"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "5"
+						},
+						{
+							"key": "skip",
+							"value": "335"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UPDATE COMMENT BY ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 200', function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"body\": \"Novi body\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseURL}}/auth/comments/1"
+			},
+			"response": []
+		}
+	]
+}
